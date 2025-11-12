@@ -7,13 +7,13 @@ import { create } from 'zustand'
  * and manages individual trait visibility for angelic and demonic transformations.
  *
  * Moral Level Scale:
- * +3: Fully angelic (robe + halo + golden glow)
- * +2: Holy (robe + halo)
+ * +3: Fully angelic (robe + enhanced glow + floating halo)
+ * +2: Holy (robe + enhanced glow)
  * +1: Virtuous (robe only)
  *  0: Neutral (baseline human)
  * -1: Corrupted (evil grin)
  * -2: Demonic (evil grin + horns)
- * -3: Fully evil (evil grin + horns + red glow)
+ * -3: Fully evil (evil grin + horns + entire body red)
  */
 export const useMoralState = create((set) => ({
   // Core moral level (-3 to +3)
@@ -23,13 +23,13 @@ export const useMoralState = create((set) => ({
   traits: {
     // Angelic traits (positive)
     whiteRobe: false,
+    robeGlow: false,
     halo: false,
-    goldenGlow: false,
 
     // Demonic traits (negative)
     evilGrin: false,
     horns: false,
-    redGlow: false,
+    bodyRed: false,
   },
 
   // Environment state
@@ -53,8 +53,8 @@ export const useMoralState = create((set) => ({
 
     // If currently evil, remove demonic traits in reverse order
     if (state.moralLevel < 0) {
-      if (state.traits.redGlow) {
-        newTraits.redGlow = false
+      if (state.traits.bodyRed) {
+        newTraits.bodyRed = false
       } else if (state.traits.horns) {
         newTraits.horns = false
       } else if (state.traits.evilGrin) {
@@ -65,10 +65,10 @@ export const useMoralState = create((set) => ({
     else {
       if (!state.traits.whiteRobe) {
         newTraits.whiteRobe = true
+      } else if (!state.traits.robeGlow) {
+        newTraits.robeGlow = true
       } else if (!state.traits.halo) {
         newTraits.halo = true
-      } else if (!state.traits.goldenGlow) {
-        newTraits.goldenGlow = true
       }
     }
 
@@ -105,10 +105,10 @@ export const useMoralState = create((set) => ({
 
     // If currently good, remove angelic traits in reverse order
     if (state.moralLevel > 0) {
-      if (state.traits.goldenGlow) {
-        newTraits.goldenGlow = false
-      } else if (state.traits.halo) {
+      if (state.traits.halo) {
         newTraits.halo = false
+      } else if (state.traits.robeGlow) {
+        newTraits.robeGlow = false
       } else if (state.traits.whiteRobe) {
         newTraits.whiteRobe = false
       }
@@ -119,8 +119,8 @@ export const useMoralState = create((set) => ({
         newTraits.evilGrin = true
       } else if (!state.traits.horns) {
         newTraits.horns = true
-      } else if (!state.traits.redGlow) {
-        newTraits.redGlow = true
+      } else if (!state.traits.bodyRed) {
+        newTraits.bodyRed = true
       }
     }
 
