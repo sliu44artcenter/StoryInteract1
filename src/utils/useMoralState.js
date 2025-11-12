@@ -149,18 +149,105 @@ export const useMoralState = create((set) => ({
 
   /**
    * Make a NEUTRAL choice (Stone)
-   * Resets environment but keeps character state
+   * Randomly chooses between adding angelic or demonic traits
    */
-  chooseNeutral: () => set((state) => ({
-    ...state,
-    environment: {
-      backgroundColor: '#a8b2bb',
-      lightColor: '#ffffff',
-      ambientIntensity: 0.5,
-      fogDensity: 0.02,
-    },
-    particleEffect: 'ripple',
-  })),
+  chooseNeutral: () => {
+    // Randomly choose good or evil (50/50 chance)
+    const chooseGood = Math.random() < 0.5
+
+    return set((state) => {
+      const newLevel = chooseGood
+        ? Math.min(state.moralLevel + 1, 3)
+        : Math.max(state.moralLevel - 1, -3)
+      const newTraits = { ...state.traits }
+
+      if (chooseGood) {
+        // Add angelic trait or remove demonic trait
+        if (state.moralLevel < 0) {
+          if (state.traits.bodyRed) {
+            newTraits.bodyRed = false
+          } else if (state.traits.horns) {
+            newTraits.horns = false
+          } else if (state.traits.evilGrin) {
+            newTraits.evilGrin = false
+          }
+        } else {
+          if (!state.traits.whiteRobe) {
+            newTraits.whiteRobe = true
+          } else if (!state.traits.robeGlow) {
+            newTraits.robeGlow = true
+          } else if (!state.traits.halo) {
+            newTraits.halo = true
+          }
+        }
+      } else {
+        // Add demonic trait or remove angelic trait
+        if (state.moralLevel > 0) {
+          if (state.traits.halo) {
+            newTraits.halo = false
+          } else if (state.traits.robeGlow) {
+            newTraits.robeGlow = false
+          } else if (state.traits.whiteRobe) {
+            newTraits.whiteRobe = false
+          }
+        } else {
+          if (!state.traits.evilGrin) {
+            newTraits.evilGrin = true
+          } else if (!state.traits.horns) {
+            newTraits.horns = true
+          } else if (!state.traits.bodyRed) {
+            newTraits.bodyRed = true
+          }
+        }
+      }
+
+      // Environment based on new moral level
+      let environment
+      if (newLevel > 0) {
+        const envColors = [
+          { bg: '#a8b2bb', light: '#ffffff', ambient: 0.5 },
+          { bg: '#c4b59a', light: '#fff5e1', ambient: 0.5 },
+          { bg: '#d4c5a1', light: '#ffd700', ambient: 0.55 },
+          { bg: '#e4d5b4', light: '#ffeb99', ambient: 0.6 },
+        ]
+        const env = envColors[newLevel]
+        environment = {
+          backgroundColor: env.bg,
+          lightColor: env.light,
+          ambientIntensity: env.ambient,
+          fogDensity: 0.02,
+        }
+      } else if (newLevel < 0) {
+        const envColors = [
+          { bg: '#a8b2bb', light: '#ffffff', ambient: 0.5 },
+          { bg: '#8a7a7a', light: '#ffd4d4', ambient: 0.4 },
+          { bg: '#6a4545', light: '#ff9999', ambient: 0.3 },
+          { bg: '#4a2020', light: '#ff5555', ambient: 0.25 },
+        ]
+        const env = envColors[Math.abs(newLevel)]
+        environment = {
+          backgroundColor: env.bg,
+          lightColor: env.light,
+          ambientIntensity: env.ambient,
+          fogDensity: 0.03,
+        }
+      } else {
+        environment = {
+          backgroundColor: '#a8b2bb',
+          lightColor: '#ffffff',
+          ambientIntensity: 0.5,
+          fogDensity: 0.02,
+        }
+      }
+
+      return {
+        moralLevel: newLevel,
+        traits: newTraits,
+        environment,
+        particleEffect: 'ripple',
+      }
+    })
+  },
 
   /**
    * Clear particle effect after animation completes
