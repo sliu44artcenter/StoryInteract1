@@ -97,11 +97,6 @@ function Character({ choice }) {
           ease: 'elastic.out(1, 0.5)',
         }
       )
-      gsap.to(angelWingsRef.current.rotation, {
-        y: Math.PI * 2,
-        duration: 2,
-        ease: 'power2.out',
-      })
 
       // Hide devil wings
       if (devilWingsRef.current) {
@@ -264,7 +259,75 @@ function Character({ choice }) {
         <meshStandardMaterial color="#1a202c" roughness={0.8} />
       </mesh>
 
-      {/* Wings removed per user request */}
+      {/* Angel Wings - Positioned at shoulder blades, spreading outward */}
+      <group ref={angelWingsRef} scale={0}>
+        {/* Left Angel Wing */}
+        <mesh
+          position={[-0.2, 0.9, -0.25]}
+          rotation={[0.2, -Math.PI / 4, 0]}
+          castShadow
+          geometry={angelWingGeometry}
+        >
+          <meshStandardMaterial
+            color="#ffd700"
+            emissive="#ffffff"
+            emissiveIntensity={0.3}
+            roughness={0.3}
+            metalness={0.1}
+          />
+        </mesh>
+
+        {/* Right Angel Wing */}
+        <mesh
+          position={[0.2, 0.9, -0.25]}
+          rotation={[0.2, Math.PI / 4, 0]}
+          castShadow
+          geometry={angelWingGeometry}
+        >
+          <meshStandardMaterial
+            color="#ffd700"
+            emissive="#ffffff"
+            emissiveIntensity={0.3}
+            roughness={0.3}
+            metalness={0.1}
+          />
+        </mesh>
+      </group>
+
+      {/* Devil Wings - Positioned at shoulder blades, spreading outward */}
+      <group ref={devilWingsRef} scale={0}>
+        {/* Left Devil Wing */}
+        <mesh
+          position={[-0.2, 0.9, -0.25]}
+          rotation={[0.2, -Math.PI / 4, 0]}
+          castShadow
+          geometry={devilWingGeometry}
+        >
+          <meshStandardMaterial
+            color="#8b0000"
+            emissive="#ff0000"
+            emissiveIntensity={0.2}
+            roughness={0.5}
+            metalness={0.3}
+          />
+        </mesh>
+
+        {/* Right Devil Wing */}
+        <mesh
+          position={[0.2, 0.9, -0.25]}
+          rotation={[0.2, Math.PI / 4, 0]}
+          castShadow
+          geometry={devilWingGeometry}
+        >
+          <meshStandardMaterial
+            color="#8b0000"
+            emissive="#ff0000"
+            emissiveIntensity={0.2}
+            roughness={0.5}
+            metalness={0.3}
+          />
+        </mesh>
+      </group>
     </group>
   )
 }
