@@ -222,8 +222,8 @@ function Scene() {
       <EffectComposer>
         {/* Bloom - Enhanced for angelic state */}
         <Bloom
-          intensity={moralLevel > 0 ? 0.6 + moralLevel * 0.3 : 0.2}
-          luminanceThreshold={0.3}
+          intensity={moralLevel > 0 ? 0.3 + moralLevel * 0.15 : 0.2}
+          luminanceThreshold={0.5}
           luminanceSmoothing={0.9}
           height={300}
         />

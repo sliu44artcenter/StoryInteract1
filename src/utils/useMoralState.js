@@ -75,9 +75,9 @@ export const useMoralState = create((set) => ({
     // Environment transitions to golden-white
     const envColors = [
       { bg: '#a8b2bb', light: '#ffffff', ambient: 0.5 }, // 0: neutral
-      { bg: '#d4c5a9', light: '#fff5e1', ambient: 0.6 }, // +1: warm
-      { bg: '#f4e4c1', light: '#ffd700', ambient: 0.7 }, // +2: golden
-      { bg: '#fef5d4', light: '#ffeb99', ambient: 0.9 }, // +3: radiant
+      { bg: '#c4b59a', light: '#fff5e1', ambient: 0.5 }, // +1: warm
+      { bg: '#d4c5a1', light: '#ffd700', ambient: 0.55 }, // +2: golden
+      { bg: '#e4d5b4', light: '#ffeb99', ambient: 0.6 }, // +3: radiant
     ]
     const envIndex = Math.max(0, newLevel)
     const env = envColors[envIndex]
