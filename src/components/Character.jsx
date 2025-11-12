@@ -28,12 +28,8 @@ function Character() {
   // Skin material references (for bodyRed transformation)
   const headMaterialRef = useRef()
   const neckMaterialRef = useRef()
-  const leftUpperArmMaterialRef = useRef()
-  const leftLowerArmMaterialRef = useRef()
-  const rightUpperArmMaterialRef = useRef()
-  const rightLowerArmMaterialRef = useRef()
-  const leftHandMaterialRef = useRef()
-  const rightHandMaterialRef = useRef()
+  const leftArmMaterialRef = useRef()
+  const rightArmMaterialRef = useRef()
 
   // Body/clothing material references (for bodyRed transformation)
   const torsoMaterialRef = useRef()
@@ -120,12 +116,8 @@ function Character() {
       const skinRed = new THREE.Color('#cc0000')
       animateColorTransition(headMaterialRef, skinRed, 1.5)
       animateColorTransition(neckMaterialRef, skinRed, 1.5)
-      animateColorTransition(leftUpperArmMaterialRef, skinRed, 1.5)
-      animateColorTransition(leftLowerArmMaterialRef, skinRed, 1.5)
-      animateColorTransition(rightUpperArmMaterialRef, skinRed, 1.5)
-      animateColorTransition(rightLowerArmMaterialRef, skinRed, 1.5)
-      animateColorTransition(leftHandMaterialRef, skinRed, 1.5)
-      animateColorTransition(rightHandMaterialRef, skinRed, 1.5)
+      animateColorTransition(leftArmMaterialRef, skinRed, 1.5)
+      animateColorTransition(rightArmMaterialRef, skinRed, 1.5)
 
       // Turn all body/clothing parts dark red
       const bodyRed = new THREE.Color('#8b0000')
@@ -149,12 +141,8 @@ function Character() {
       const skinNeutral = new THREE.Color('#ffdbac')
       animateColorTransition(headMaterialRef, skinNeutral, 1.2)
       animateColorTransition(neckMaterialRef, skinNeutral, 1.2)
-      animateColorTransition(leftUpperArmMaterialRef, skinNeutral, 1.2)
-      animateColorTransition(leftLowerArmMaterialRef, skinNeutral, 1.2)
-      animateColorTransition(rightUpperArmMaterialRef, skinNeutral, 1.2)
-      animateColorTransition(rightLowerArmMaterialRef, skinNeutral, 1.2)
-      animateColorTransition(leftHandMaterialRef, skinNeutral, 1.2)
-      animateColorTransition(rightHandMaterialRef, skinNeutral, 1.2)
+      animateColorTransition(leftArmMaterialRef, skinNeutral, 1.2)
+      animateColorTransition(rightArmMaterialRef, skinNeutral, 1.2)
 
       const bodyNeutral = new THREE.Color('#4a5568')
       animateColorTransition(torsoMaterialRef, bodyNeutral, 1.2)
@@ -233,32 +221,14 @@ function Character() {
         <meshStandardMaterial ref={rightShoulderMaterialRef} color="#4a5568" roughness={0.6} />
       </mesh>
 
-      {/* Arms */}
-      <mesh position={[-0.45, 0.7, 0]} rotation={[0, 0, 0.2]} castShadow>
-        <capsuleGeometry args={[0.08, 0.35, 4, 12]} />
-        <meshStandardMaterial ref={leftUpperArmMaterialRef} color="#ffdbac" roughness={0.5} />
+      {/* Arms - Single continuous limbs from shoulder to hand */}
+      <mesh position={[-0.5, 0.525, 0]} rotation={[0, 0, 0.15]} castShadow>
+        <capsuleGeometry args={[0.08, 0.85, 4, 16]} />
+        <meshStandardMaterial ref={leftArmMaterialRef} color="#ffdbac" roughness={0.5} />
       </mesh>
-      <mesh position={[-0.55, 0.35, 0]} rotation={[0, 0, 0.1]} castShadow>
-        <capsuleGeometry args={[0.07, 0.35, 4, 12]} />
-        <meshStandardMaterial ref={leftLowerArmMaterialRef} color="#ffdbac" roughness={0.5} />
-      </mesh>
-      <mesh position={[0.45, 0.7, 0]} rotation={[0, 0, -0.2]} castShadow>
-        <capsuleGeometry args={[0.08, 0.35, 4, 12]} />
-        <meshStandardMaterial ref={rightUpperArmMaterialRef} color="#ffdbac" roughness={0.5} />
-      </mesh>
-      <mesh position={[0.55, 0.35, 0]} rotation={[0, 0, -0.1]} castShadow>
-        <capsuleGeometry args={[0.07, 0.35, 4, 12]} />
-        <meshStandardMaterial ref={rightLowerArmMaterialRef} color="#ffdbac" roughness={0.5} />
-      </mesh>
-
-      {/* Hands */}
-      <mesh position={[-0.6, 0.1, 0]} castShadow>
-        <sphereGeometry args={[0.08, 12, 12]} />
-        <meshStandardMaterial ref={leftHandMaterialRef} color="#ffdbac" roughness={0.5} />
-      </mesh>
-      <mesh position={[0.6, 0.1, 0]} castShadow>
-        <sphereGeometry args={[0.08, 12, 12]} />
-        <meshStandardMaterial ref={rightHandMaterialRef} color="#ffdbac" roughness={0.5} />
+      <mesh position={[0.5, 0.525, 0]} rotation={[0, 0, -0.15]} castShadow>
+        <capsuleGeometry args={[0.08, 0.85, 4, 16]} />
+        <meshStandardMaterial ref={rightArmMaterialRef} color="#ffdbac" roughness={0.5} />
       </mesh>
 
       {/* Hips */}
