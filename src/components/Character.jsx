@@ -266,8 +266,8 @@ function Character({ choice }) {
 
       {/* Angel Wings - Smooth and Feathered */}
       <group ref={angelWingsRef} position={[0, 0.8, -0.3]} scale={0}>
-        {/* Left Wing - Positioned at back, spreads outward to the left */}
-        <group position={[-0.05, 0, -0.15]} rotation={[0.1, -Math.PI * 0.75, 0.2]}>
+        {/* Left Wing - Grows from center of back, spreads left */}
+        <group position={[0, 0, -0.15]} rotation={[0, Math.PI - 0.5, 0.2]}>
           <mesh geometry={angelWingGeometry}>
             <meshStandardMaterial
               color="#ffffff"
@@ -300,8 +300,8 @@ function Character({ choice }) {
           </mesh>
         </group>
 
-        {/* Right Wing - Positioned at back, spreads outward to the right */}
-        <group position={[0.05, 0, -0.15]} rotation={[0.1, Math.PI * 0.75, -0.2]}>
+        {/* Right Wing - Grows from center of back, spreads right */}
+        <group position={[0, 0, -0.15]} rotation={[0, -Math.PI + 0.5, -0.2]}>
           <mesh geometry={angelWingGeometry}>
             <meshStandardMaterial
               color="#ffffff"
@@ -337,8 +337,8 @@ function Character({ choice }) {
 
       {/* Devil Wings - Smooth Bat Wings */}
       <group ref={devilWingsRef} position={[0, 0.8, -0.3]} scale={0}>
-        {/* Left Wing - Positioned at back, spreads outward to the left */}
-        <group position={[-0.05, 0, -0.15]} rotation={[0.3, -Math.PI * 0.7, 0.3]}>
+        {/* Left Wing - Grows from center of back, spreads left */}
+        <group position={[0, 0, -0.15]} rotation={[0.2, Math.PI - 0.6, 0.3]}>
           <mesh geometry={devilWingGeometry}>
             <meshStandardMaterial
               color="#4a0000"
@@ -367,8 +367,8 @@ function Character({ choice }) {
           </mesh>
         </group>
 
-        {/* Right Wing - Positioned at back, spreads outward to the right */}
-        <group position={[0.05, 0, -0.15]} rotation={[0.3, Math.PI * 0.7, -0.3]}>
+        {/* Right Wing - Grows from center of back, spreads right */}
+        <group position={[0, 0, -0.15]} rotation={[0.2, -Math.PI + 0.6, -0.3]}>
           <mesh geometry={devilWingGeometry}>
             <meshStandardMaterial
               color="#4a0000"
