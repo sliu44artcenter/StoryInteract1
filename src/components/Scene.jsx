@@ -20,10 +20,35 @@ function Scene({ choice, setChoice }) {
   const sceneRef = useRef()
   const lightRef = useRef()
   const ambientRef = useRef()
-  const bgColorRef = useRef(new THREE.Color(0x1a1a2e))
 
   const [showParticles, setShowParticles] = useState(false)
   const [particleColor, setParticleColor] = useState('#ffd700')
+
+  // Background textures
+  const [backgroundTextures, setBackgroundTextures] = useState({
+    heaven: null,
+    hell: null,
+    default: new THREE.Color(0x1a1a2e)
+  })
+  const [currentBackground, setCurrentBackground] = useState('default')
+  const backgroundOpacity = useRef(0)
+
+  /**
+   * Load background images
+   */
+  useEffect(() => {
+    const textureLoader = new THREE.TextureLoader()
+
+    // Load Heaven background
+    textureLoader.load('/StoryInteract1/images/Heaven.jpeg', (texture) => {
+      setBackgroundTextures((prev) => ({ ...prev, heaven: texture }))
+    })
+
+    // Load Hell background
+    textureLoader.load('/StoryInteract1/images/hell.jpg', (texture) => {
+      setBackgroundTextures((prev) => ({ ...prev, hell: texture }))
+    })
+  }, [])
 
   /**
    * Handle icon click events
@@ -35,27 +60,27 @@ function Scene({ choice, setChoice }) {
     setChoice(choiceType)
     setShowParticles(true)
 
-    // Background color transitions based on choice
-    let targetColor
+    // Background transitions based on choice
     let lightColor
     let lightIntensity
     let particleCol
+    let backgroundType
 
     switch (choiceType) {
       case 'angel':
-        targetColor = new THREE.Color(0xfff4e6) // Warm golden
+        backgroundType = 'heaven'
         lightColor = new THREE.Color(0xffd700) // Golden light
         lightIntensity = 2.5
         particleCol = '#ffd700'
         break
       case 'devil':
-        targetColor = new THREE.Color(0x2d0a0a) // Deep red
+        backgroundType = 'hell'
         lightColor = new THREE.Color(0xff0000) // Red light
         lightIntensity = 2.0
         particleCol = '#ff4500'
         break
       case 'neutral':
-        targetColor = new THREE.Color(0x1a1a2e) // Original dark blue-gray
+        backgroundType = 'default'
         lightColor = new THREE.Color(0xffffff) // White light
         lightIntensity = 1.5
         particleCol = '#cccccc'
@@ -66,15 +91,7 @@ function Scene({ choice, setChoice }) {
     }
 
     setParticleColor(particleCol)
-
-    // Animate background color transition
-    gsap.to(bgColorRef.current, {
-      r: targetColor.r,
-      g: targetColor.g,
-      b: targetColor.b,
-      duration: 2.5,
-      ease: 'power2.inOut',
-    })
+    setCurrentBackground(backgroundType)
 
     // Animate directional light color and intensity
     if (lightRef.current) {
@@ -101,13 +118,27 @@ function Scene({ choice, setChoice }) {
         ease: 'power2.inOut',
       })
     }
+
+    // Animate background opacity for smooth transition
+    gsap.to(backgroundOpacity, {
+      current: 1,
+      duration: 2.5,
+      ease: 'power2.inOut',
+    })
   }
 
   /**
-   * Update scene background color every frame
+   * Update scene background every frame
+   * Switches between textures and default color based on current choice
    */
   useFrame(({ scene }) => {
-    scene.background = bgColorRef.current
+    if (currentBackground === 'heaven' && backgroundTextures.heaven) {
+      scene.background = backgroundTextures.heaven
+    } else if (currentBackground === 'hell' && backgroundTextures.hell) {
+      scene.background = backgroundTextures.hell
+    } else {
+      scene.background = backgroundTextures.default
+    }
   })
 
   return (
@@ -141,7 +172,6 @@ function Scene({ choice, setChoice }) {
 
       {/* Environment and Atmospheric Effects */}
       <Environment preset="sunset" />
-      <fog attach="fog" args={[bgColorRef.current, 10, 50]} />
 
       {/* Ground Plane with Contact Shadows */}
       <ContactShadows
