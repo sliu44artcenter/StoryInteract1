@@ -34,21 +34,51 @@ function Scene() {
   const { scene, camera } = useThree()
   const cameraRef = useRef(camera)
 
+  // Background textures for final stages
+  const heavenTextureRef = useRef(null)
+  const hellTextureRef = useRef(null)
+
+  /**
+   * Load background images
+   */
+  useEffect(() => {
+    const textureLoader = new THREE.TextureLoader()
+
+    // Load Heaven background for +3 stage
+    textureLoader.load('/StoryInteract1/images/Heaven.jpeg', (texture) => {
+      heavenTextureRef.current = texture
+    })
+
+    // Load Hell background for -3 stage
+    textureLoader.load('/StoryInteract1/images/hell.jpg', (texture) => {
+      hellTextureRef.current = texture
+    })
+  }, [])
+
   /**
    * Animate environment changes
    */
   useEffect(() => {
-    // Background color transition
-    if (scene.background) {
-      gsap.to(scene.background, {
-        r: new THREE.Color(environment.backgroundColor).r,
-        g: new THREE.Color(environment.backgroundColor).g,
-        b: new THREE.Color(environment.backgroundColor).b,
-        duration: 1.5,
-        ease: 'power2.inOut',
-      })
+    // Background transition based on moral level
+    if (moralLevel === 3 && heavenTextureRef.current) {
+      // Final angelic stage - use Heaven image
+      scene.background = heavenTextureRef.current
+    } else if (moralLevel === -3 && hellTextureRef.current) {
+      // Final demonic stage - use Hell image
+      scene.background = hellTextureRef.current
     } else {
-      scene.background = new THREE.Color(environment.backgroundColor)
+      // Intermediate stages - use color gradients
+      if (scene.background instanceof THREE.Color) {
+        gsap.to(scene.background, {
+          r: new THREE.Color(environment.backgroundColor).r,
+          g: new THREE.Color(environment.backgroundColor).g,
+          b: new THREE.Color(environment.backgroundColor).b,
+          duration: 1.5,
+          ease: 'power2.inOut',
+        })
+      } else {
+        scene.background = new THREE.Color(environment.backgroundColor)
+      }
     }
 
     // Ambient light transition
