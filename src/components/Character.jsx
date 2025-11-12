@@ -1,170 +1,139 @@
-import React, { useRef, useEffect, useMemo } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
-import gsap from 'gsap'
 import * as THREE from 'three'
+import { useMoralState } from '../utils/useMoralState'
+import {
+  animateTraitAppear,
+  animateTraitDisappear,
+  animateColorTransition,
+  animateEmissive,
+} from './Transitions'
 
 /**
  * Character Component
- * Represents a refined humanoid figure with realistic proportions
- * Dynamically grows smooth, curved angel or devil wings based on user choice
+ *
+ * Central humanoid figure that transforms based on moral choices
+ * Displays progressive angelic or demonic traits symbolically
+ *
+ * Angelic traits: White robe → Halo → Golden glow
+ * Demonic traits: Evil grin → Horns → Red glow
  */
-function Character({ choice }) {
-  const characterRef = useRef()
-  const angelWingsRef = useRef()
-  const devilWingsRef = useRef()
+function Character() {
+  // Zustand moral state
+  const { traits, moralLevel } = useMoralState()
 
-  // Subtle idle animation (breathing effect)
+  // Character mesh references
+  const characterGroupRef = useRef()
+  const skinMaterialRef = useRef()
+  const bodyMaterialRef = useRef()
+
+  // Trait mesh references
+  const robeRef = useRef()
+  const haloRef = useRef()
+  const goldenGlowRef = useRef()
+  const evilGrinRef = useRef()
+  const leftHornRef = useRef()
+  const rightHornRef = useRef()
+  const redGlowRef = useRef()
+
+  // Previous trait states for animation detection
+  const prevTraitsRef = useRef({ ...traits })
+
+  /**
+   * Subtle idle breathing animation
+   */
   useFrame((state) => {
-    if (characterRef.current) {
-      characterRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.05
+    if (characterGroupRef.current) {
+      characterGroupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.04
     }
   })
 
   /**
-   * Create smooth angel wing geometry using curves
-   */
-  const createAngelWingGeometry = () => {
-    const shape = new THREE.Shape()
-
-    // Create a feather-like wing shape with smooth curves
-    shape.moveTo(0, 0)
-    shape.bezierCurveTo(0.3, 0.2, 0.6, 0.5, 1, 0.8)
-    shape.bezierCurveTo(1.3, 1, 1.5, 1.1, 1.6, 1.2)
-    shape.bezierCurveTo(1.5, 1.3, 1.3, 1.35, 1, 1.3)
-    shape.bezierCurveTo(0.7, 1.2, 0.4, 0.9, 0.2, 0.6)
-    shape.bezierCurveTo(0.1, 0.4, 0.05, 0.2, 0, 0)
-
-    const extrudeSettings = {
-      steps: 2,
-      depth: 0.05,
-      bevelEnabled: true,
-      bevelThickness: 0.02,
-      bevelSize: 0.02,
-      bevelSegments: 3
-    }
-
-    return new THREE.ExtrudeGeometry(shape, extrudeSettings)
-  }
-
-  /**
-   * Create smooth devil wing geometry (bat-like)
-   */
-  const createDevilWingGeometry = () => {
-    const shape = new THREE.Shape()
-
-    // Create a bat wing shape with smooth curves and points
-    shape.moveTo(0, 0)
-    shape.bezierCurveTo(0.2, 0.3, 0.4, 0.6, 0.7, 0.9)
-    shape.lineTo(0.9, 1.1)
-    shape.bezierCurveTo(1.1, 1.2, 1.3, 1.15, 1.4, 1.0)
-    shape.lineTo(1.2, 0.8)
-    shape.bezierCurveTo(1.3, 0.7, 1.35, 0.5, 1.3, 0.3)
-    shape.lineTo(1.0, 0.4)
-    shape.bezierCurveTo(0.8, 0.2, 0.5, 0.05, 0.2, -0.1)
-    shape.bezierCurveTo(0.1, -0.05, 0.05, 0, 0, 0)
-
-    const extrudeSettings = {
-      steps: 2,
-      depth: 0.03,
-      bevelEnabled: true,
-      bevelThickness: 0.01,
-      bevelSize: 0.01,
-      bevelSegments: 2
-    }
-
-    return new THREE.ExtrudeGeometry(shape, extrudeSettings)
-  }
-
-  const angelWingGeometry = useMemo(() => createAngelWingGeometry(), [])
-  const devilWingGeometry = useMemo(() => createDevilWingGeometry(), [])
-
-  /**
-   * Trigger wing growth animations when choice changes
+   * Animate trait changes based on moral state
    */
   useEffect(() => {
-    if (!choice) return
+    const prev = prevTraitsRef.current
 
-    if (choice === 'angel' && angelWingsRef.current) {
-      // Grow angel wings with elegant animation
-      gsap.fromTo(
-        angelWingsRef.current.scale,
-        { x: 0, y: 0, z: 0 },
-        {
-          x: 1,
-          y: 1,
-          z: 1,
-          duration: 1.5,
-          ease: 'elastic.out(1, 0.5)',
-        }
-      )
+    // WHITE ROBE
+    if (traits.whiteRobe && !prev.whiteRobe) {
+      animateTraitAppear(robeRef, 1.0)
+    } else if (!traits.whiteRobe && prev.whiteRobe) {
+      animateTraitDisappear(robeRef, 0.8)
+    }
 
-      // Hide devil wings
-      if (devilWingsRef.current) {
-        gsap.to(devilWingsRef.current.scale, {
-          x: 0,
-          y: 0,
-          z: 0,
-          duration: 0.5,
-        })
-      }
-    } else if (choice === 'devil' && devilWingsRef.current) {
-      // Grow devil wings with menacing animation
-      gsap.fromTo(
-        devilWingsRef.current.scale,
-        { x: 0, y: 0, z: 0 },
-        {
-          x: 1,
-          y: 1,
-          z: 1,
-          duration: 1.5,
-          ease: 'back.out(1.7)',
-        }
-      )
+    // HALO
+    if (traits.halo && !prev.halo) {
+      animateTraitAppear(haloRef, 0.9)
+    } else if (!traits.halo && prev.halo) {
+      animateTraitDisappear(haloRef, 0.7)
+    }
 
-      // Hide angel wings
-      if (angelWingsRef.current) {
-        gsap.to(angelWingsRef.current.scale, {
-          x: 0,
-          y: 0,
-          z: 0,
-          duration: 0.5,
-        })
+    // GOLDEN GLOW
+    if (traits.goldenGlow && !prev.goldenGlow) {
+      animateTraitAppear(goldenGlowRef, 1.2)
+    } else if (!traits.goldenGlow && prev.goldenGlow) {
+      animateTraitDisappear(goldenGlowRef, 0.8)
+    }
+
+    // EVIL GRIN
+    if (traits.evilGrin && !prev.evilGrin) {
+      animateTraitAppear(evilGrinRef, 0.6)
+    } else if (!traits.evilGrin && prev.evilGrin) {
+      animateTraitDisappear(evilGrinRef, 0.5)
+    }
+
+    // HORNS
+    if (traits.horns && !prev.horns) {
+      animateTraitAppear(leftHornRef, 0.9)
+      animateTraitAppear(rightHornRef, 0.9)
+    } else if (!traits.horns && prev.horns) {
+      animateTraitDisappear(leftHornRef, 0.7)
+      animateTraitDisappear(rightHornRef, 0.7)
+    }
+
+    // RED GLOW
+    if (traits.redGlow && !prev.redGlow) {
+      animateTraitAppear(redGlowRef, 1.0)
+      // Animate skin to red
+      if (skinMaterialRef.current && bodyMaterialRef.current) {
+        animateColorTransition(skinMaterialRef, new THREE.Color('#ff6b6b'), 1.2)
+        animateColorTransition(bodyMaterialRef, new THREE.Color('#8b0000'), 1.2)
+        animateEmissive(bodyMaterialRef, new THREE.Color('#ff0000'), 0.4, 1.2)
       }
-    } else if (choice === 'neutral') {
-      // Hide both wings
-      if (angelWingsRef.current) {
-        gsap.to(angelWingsRef.current.scale, {
-          x: 0,
-          y: 0,
-          z: 0,
-          duration: 0.8,
-        })
-      }
-      if (devilWingsRef.current) {
-        gsap.to(devilWingsRef.current.scale, {
-          x: 0,
-          y: 0,
-          z: 0,
-          duration: 0.8,
-        })
+    } else if (!traits.redGlow && prev.redGlow) {
+      animateTraitDisappear(redGlowRef, 0.8)
+      // Restore neutral skin color
+      if (skinMaterialRef.current && bodyMaterialRef.current) {
+        animateColorTransition(skinMaterialRef, new THREE.Color('#ffdbac'), 1.0)
+        animateColorTransition(bodyMaterialRef, new THREE.Color('#4a5568'), 1.0)
+        animateEmissive(bodyMaterialRef, new THREE.Color('#000000'), 0, 1.0)
       }
     }
-  }, [choice])
+
+    prevTraitsRef.current = { ...traits }
+  }, [traits])
 
   return (
-    <group ref={characterRef} position={[0, 1, 0]}>
-      {/* Head with more detail */}
+    <group ref={characterGroupRef} position={[0, 0.5, 0]}>
+      {/* ========== BODY BASE ========== */}
+
+      {/* Head */}
       <mesh position={[0, 1.4, 0]} castShadow>
         <sphereGeometry args={[0.25, 32, 32]} />
-        <meshStandardMaterial color="#ffdbac" roughness={0.4} />
+        <meshStandardMaterial
+          ref={skinMaterialRef}
+          color="#ffdbac"
+          roughness={0.5}
+          metalness={0.1}
+        />
       </mesh>
 
       {/* Eyes */}
-      <mesh position={[-0.08, 1.45, 0.2]} castShadow>
+      <mesh position={[-0.08, 1.45, 0.2]}>
         <sphereGeometry args={[0.03, 16, 16]} />
         <meshStandardMaterial color="#2d3748" />
       </mesh>
-      <mesh position={[0.08, 1.45, 0.2]} castShadow>
+      <mesh position={[0.08, 1.45, 0.2]}>
         <sphereGeometry args={[0.03, 16, 16]} />
         <meshStandardMaterial color="#2d3748" />
       </mesh>
@@ -172,13 +141,18 @@ function Character({ choice }) {
       {/* Neck */}
       <mesh position={[0, 1.15, 0]} castShadow>
         <cylinderGeometry args={[0.1, 0.12, 0.2, 16]} />
-        <meshStandardMaterial color="#ffdbac" roughness={0.4} />
+        <meshStandardMaterial color="#ffdbac" roughness={0.5} />
       </mesh>
 
-      {/* Torso - More anatomical shape */}
+      {/* Torso */}
       <mesh position={[0, 0.7, 0]} castShadow>
         <capsuleGeometry args={[0.28, 0.6, 4, 16]} />
-        <meshStandardMaterial color="#4a5568" roughness={0.6} />
+        <meshStandardMaterial
+          ref={bodyMaterialRef}
+          color="#4a5568"
+          roughness={0.6}
+          metalness={0.1}
+        />
       </mesh>
 
       {/* Shoulders */}
@@ -191,25 +165,22 @@ function Character({ choice }) {
         <meshStandardMaterial color="#4a5568" roughness={0.6} />
       </mesh>
 
-      {/* Arms - Upper and Lower */}
-      {/* Left Arm */}
+      {/* Arms */}
       <mesh position={[-0.45, 0.7, 0]} rotation={[0, 0, 0.2]} castShadow>
         <capsuleGeometry args={[0.08, 0.35, 4, 12]} />
-        <meshStandardMaterial color="#ffdbac" roughness={0.4} />
+        <meshStandardMaterial color="#ffdbac" roughness={0.5} />
       </mesh>
       <mesh position={[-0.55, 0.35, 0]} rotation={[0, 0, 0.1]} castShadow>
         <capsuleGeometry args={[0.07, 0.35, 4, 12]} />
-        <meshStandardMaterial color="#ffdbac" roughness={0.4} />
+        <meshStandardMaterial color="#ffdbac" roughness={0.5} />
       </mesh>
-
-      {/* Right Arm */}
       <mesh position={[0.45, 0.7, 0]} rotation={[0, 0, -0.2]} castShadow>
         <capsuleGeometry args={[0.08, 0.35, 4, 12]} />
-        <meshStandardMaterial color="#ffdbac" roughness={0.4} />
+        <meshStandardMaterial color="#ffdbac" roughness={0.5} />
       </mesh>
       <mesh position={[0.55, 0.35, 0]} rotation={[0, 0, -0.1]} castShadow>
         <capsuleGeometry args={[0.07, 0.35, 4, 12]} />
-        <meshStandardMaterial color="#ffdbac" roughness={0.4} />
+        <meshStandardMaterial color="#ffdbac" roughness={0.5} />
       </mesh>
 
       {/* Hands */}
@@ -228,8 +199,7 @@ function Character({ choice }) {
         <meshStandardMaterial color="#2d3748" roughness={0.7} />
       </mesh>
 
-      {/* Legs - Upper and Lower */}
-      {/* Left Leg */}
+      {/* Legs */}
       <mesh position={[-0.15, -0.1, 0]} castShadow>
         <capsuleGeometry args={[0.11, 0.45, 4, 12]} />
         <meshStandardMaterial color="#2d3748" roughness={0.7} />
@@ -238,8 +208,6 @@ function Character({ choice }) {
         <capsuleGeometry args={[0.09, 0.4, 4, 12]} />
         <meshStandardMaterial color="#2d3748" roughness={0.7} />
       </mesh>
-
-      {/* Right Leg */}
       <mesh position={[0.15, -0.1, 0]} castShadow>
         <capsuleGeometry args={[0.11, 0.45, 4, 12]} />
         <meshStandardMaterial color="#2d3748" roughness={0.7} />
@@ -259,75 +227,115 @@ function Character({ choice }) {
         <meshStandardMaterial color="#1a202c" roughness={0.8} />
       </mesh>
 
-      {/* Angel Wings - Positioned at shoulder blades, spreading outward */}
-      <group ref={angelWingsRef} scale={0}>
-        {/* Left Angel Wing */}
-        <mesh
-          position={[-0.2, 0.9, -0.25]}
-          rotation={[0.2, -Math.PI / 4, 0]}
-          castShadow
-          geometry={angelWingGeometry}
-        >
-          <meshStandardMaterial
-            color="#ffd700"
-            emissive="#ffffff"
-            emissiveIntensity={0.3}
-            roughness={0.3}
-            metalness={0.1}
-          />
-        </mesh>
+      {/* ========== ANGELIC TRAITS ========== */}
 
-        {/* Right Angel Wing */}
-        <mesh
-          position={[0.2, 0.9, -0.25]}
-          rotation={[0.2, Math.PI / 4, 0]}
-          castShadow
-          geometry={angelWingGeometry}
-        >
-          <meshStandardMaterial
-            color="#ffd700"
-            emissive="#ffffff"
-            emissiveIntensity={0.3}
-            roughness={0.3}
-            metalness={0.1}
-          />
-        </mesh>
-      </group>
+      {/* White Robe */}
+      <mesh ref={robeRef} position={[0, 0.5, 0]} visible={false} castShadow>
+        <cylinderGeometry args={[0.5, 0.6, 1.2, 32]} />
+        <meshStandardMaterial
+          color="#ffffff"
+          emissive="#fef9e7"
+          emissiveIntensity={0.3}
+          transparent
+          opacity={0}
+          roughness={0.7}
+          metalness={0.1}
+        />
+      </mesh>
 
-      {/* Devil Wings - Positioned at shoulder blades, spreading outward */}
-      <group ref={devilWingsRef} scale={0}>
-        {/* Left Devil Wing */}
-        <mesh
-          position={[-0.2, 0.9, -0.25]}
-          rotation={[0.2, -Math.PI / 4, 0]}
-          castShadow
-          geometry={devilWingGeometry}
-        >
-          <meshStandardMaterial
-            color="#8b0000"
-            emissive="#ff0000"
-            emissiveIntensity={0.2}
-            roughness={0.5}
-            metalness={0.3}
-          />
-        </mesh>
+      {/* Halo */}
+      <mesh ref={haloRef} position={[0, 1.85, 0]} rotation={[Math.PI / 2, 0, 0]} visible={false}>
+        <torusGeometry args={[0.35, 0.04, 16, 32]} />
+        <meshStandardMaterial
+          color="#ffd700"
+          emissive="#ffeb99"
+          emissiveIntensity={0.8}
+          transparent
+          opacity={0}
+          roughness={0.2}
+          metalness={0.3}
+        />
+      </mesh>
 
-        {/* Right Devil Wing */}
-        <mesh
-          position={[0.2, 0.9, -0.25]}
-          rotation={[0.2, Math.PI / 4, 0]}
-          castShadow
-          geometry={devilWingGeometry}
-        >
-          <meshStandardMaterial
-            color="#8b0000"
-            emissive="#ff0000"
-            emissiveIntensity={0.2}
-            roughness={0.5}
-            metalness={0.3}
-          />
-        </mesh>
-      </group>
+      {/* Golden Glow (large transparent sphere) */}
+      <mesh ref={goldenGlowRef} position={[0, 0.8, 0]} visible={false}>
+        <sphereGeometry args={[1.2, 32, 32]} />
+        <meshStandardMaterial
+          color="#fff9e6"
+          emissive="#ffd700"
+          emissiveIntensity={0.5}
+          transparent
+          opacity={0}
+          roughness={0.8}
+          metalness={0}
+        />
+      </mesh>
+
+      {/* ========== DEMONIC TRAITS ========== */}
+
+      {/* Evil Grin (red emissive overlay on mouth area) */}
+      <mesh ref={evilGrinRef} position={[0, 1.3, 0.24]} visible={false}>
+        <sphereGeometry args={[0.12, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial
+          color="#ff0000"
+          emissive="#ff0000"
+          emissiveIntensity={1.0}
+          transparent
+          opacity={0}
+          roughness={0.3}
+        />
+      </mesh>
+
+      {/* Horns */}
+      <mesh
+        ref={leftHornRef}
+        position={[-0.15, 1.6, 0.05]}
+        rotation={[-0.3, -0.4, -0.2]}
+        visible={false}
+        castShadow
+      >
+        <coneGeometry args={[0.08, 0.4, 8]} />
+        <meshStandardMaterial
+          color="#1a1a1a"
+          emissive="#440000"
+          emissiveIntensity={0.2}
+          transparent
+          opacity={0}
+          roughness={0.4}
+          metalness={0.6}
+        />
+      </mesh>
+      <mesh
+        ref={rightHornRef}
+        position={[0.15, 1.6, 0.05]}
+        rotation={[-0.3, 0.4, 0.2]}
+        visible={false}
+        castShadow
+      >
+        <coneGeometry args={[0.08, 0.4, 8]} />
+        <meshStandardMaterial
+          color="#1a1a1a"
+          emissive="#440000"
+          emissiveIntensity={0.2}
+          transparent
+          opacity={0}
+          roughness={0.4}
+          metalness={0.6}
+        />
+      </mesh>
+
+      {/* Red Glow (large red sphere) */}
+      <mesh ref={redGlowRef} position={[0, 0.8, 0]} visible={false}>
+        <sphereGeometry args={[1.1, 32, 32]} />
+        <meshStandardMaterial
+          color="#4a0000"
+          emissive="#ff0000"
+          emissiveIntensity={0.4}
+          transparent
+          opacity={0}
+          roughness={0.9}
+        />
+      </mesh>
     </group>
   )
 }

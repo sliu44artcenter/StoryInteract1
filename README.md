@@ -1,38 +1,78 @@
-# 🌟 3D Narrative Scene - Interactive Moral Choices
+# 🌸 3D Moral Choice Narrative
 
-An immersive 3D narrative experience built with **Three.js**, **React**, and **GSAP** that tells a story of moral choices through visual symbolism and cinematic interactions.
+An immersive **React + Three.js + GSAP** experience that tells a purely visual story of moral transformation through symbolic interactions.
 
-## ✨ Features
+A person stands calmly at the center of a minimalistic 3D world. The entire narrative unfolds through **color, motion, and light** — no text, no dialogue, just visual poetry.
 
-- **Interactive 3D Character**: A humanoid figure that transforms based on moral choices
-- **Visual Storytelling**: No text or dialogue - pure symbolic narrative
-- **Three Moral Paths**:
-  - 🌟 **Golden Halo** - Choose the path of good deeds (angel wings & golden atmosphere)
-  - 🔥 **Dark Flame** - Choose the path of evil deeds (devil wings & red atmosphere)
-  - ⚖️ **Balance Scale** - Choose neutrality (no transformation)
-- **Cinematic Effects**:
-  - Dynamic lighting transitions
-  - Ambient particle systems
-  - Post-processing effects (bloom, vignette)
-  - Smooth GSAP animations
-  - Interactive hover states
+---
 
-## 🎮 How to Experience
+## ✨ Core Concept
 
-1. **Open the webpage** - A 3D character stands in the center
-2. **Observe the three floating icons** around the character
-3. **Hover over icons** - They glow and pulse with anticipation
-4. **Click an icon** to make your choice:
-   - **Halo Icon** → Angel wings grow, golden light fills the scene
-   - **Flame Icon** → Devil wings emerge, darkness and red hues envelop
-   - **Scale Icon** → Character remains unchanged, maintaining balance
+Three floating icons orbit before you, each representing a moral path:
+
+- **🌸 Flower** → Good choices (angelic transformation)
+- **🪨 Stone** → Neutral choices (maintain balance)
+- **🔪 Knife** → Evil choices (demonic transformation)
+
+Every click shifts the moral balance, gradually transforming the central figure and environment in symbolic ways.
+
+---
+
+## 🎮 How It Works
+
+### Moral Level System
+
+The character exists on a spectrum from **-3 (Fully Evil)** to **+3 (Fully Good)**:
+
+```
+-3  -2  -1   0   +1  +2  +3
+👿  😈  😠  😐  😊  😇  ✨
+```
+
+### Transformation Sequences
+
+#### **Good Choice — Flower 🌸**
+
+If demonic traits exist, they fade away first (in reverse order):
+1. Red glow disappears
+2. Horns dissolve
+3. Evil grin fades
+
+If already neutral, angelic traits appear sequentially:
+1. White robe materializes
+2. Glowing halo appears
+3. Golden light emanates
+
+**Environment**: Transitions to radiant gold-white gradient with floating golden particles.
+
+#### **Evil Choice — Knife 🔪**
+
+If angelic traits exist, they vanish first (in reverse order):
+1. Golden glow dims
+2. Halo disappears
+3. White robe fades
+
+If already neutral, demonic traits emerge sequentially:
+1. Evil grin (red emissive overlay)
+2. Horns grow from head
+3. Body turns deep red with flickering underlight
+
+**Environment**: Darkens to deep crimson with floating red embers.
+
+#### **Neutral Choice — Stone 🪨**
+
+- Character remains unchanged
+- Ground ripple animation triggers
+- Environment resets to soft gray
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- npm or yarn
+- **Node.js** v16+
+- **npm** or **yarn**
 
 ### Installation
 
@@ -46,166 +86,221 @@ npm run dev
 # Open browser to http://localhost:3000
 ```
 
-### Build for Production
+### Build & Deploy
 
 ```bash
-# Create optimized production build
+# Build for production
 npm run build
 
-# Preview production build locally
+# Preview build locally
 npm run preview
+
+# Deploy to GitHub Pages
+npm run deploy-pages
 ```
 
-## 🌐 Deploy to GitHub Pages
-
-### Option 1: Automated Deployment
-
-```bash
-# Build and deploy in one command
-npm run deploy
-```
-
-### Option 2: Manual Deployment
-
-```bash
-# Build the project
-npm run build
-
-# Install gh-pages if not already installed
-npm install -g gh-pages
-
-# Deploy dist folder to gh-pages branch
-gh-pages -d dist
-```
-
-### Enable GitHub Pages
-
-1. Go to your repository settings
-2. Navigate to **Pages** section
-3. Set source to `gh-pages` branch
-4. Save and wait for deployment
-5. Access at: `https://yourusername.github.io/StoryInteract1/`
+---
 
 ## 📁 Project Structure
 
 ```
-3d-narrative-scene/
-├── src/
-│   ├── components/
-│   │   ├── Scene.jsx          # Main 3D scene orchestration
-│   │   ├── Character.jsx      # Humanoid character with wings
-│   │   ├── HaloIcon.jsx       # Golden halo icon (good)
-│   │   ├── FlameIcon.jsx      # Dark flame icon (evil)
-│   │   ├── ScaleIcon.jsx      # Balance scale icon (neutral)
-│   │   └── Particles.jsx      # Ambient particle effects
-│   ├── App.jsx                # Root component
-│   └── main.jsx               # Application entry point
-├── index.html                 # HTML entry point
-├── vite.config.js             # Vite configuration
-└── package.json               # Dependencies and scripts
+/src
+  /components
+    Scene.jsx          # Main 3D environment & rendering
+    Character.jsx      # Central humanoid with moral traits
+    Icons.jsx          # Interactive Flower, Stone, Knife icons
+    Transitions.js     # GSAP animation timelines
+  /utils
+    useMoralState.js   # Zustand store for moral level tracking
+  main.jsx
+  App.jsx
+/public
+index.html
+vite.config.js
+package.json
 ```
 
-## 🎨 Technical Highlights
+---
 
-### Three.js Scene Setup
-- **Camera**: Positioned at [0, 2, 8] with 50° FOV
-- **Lighting**: Ambient + directional + point lights with dynamic color transitions
-- **Shadows**: High-quality contact shadows and shadow mapping
-- **Environment**: Sunset preset with dynamic fog
+## 🎨 Technical Architecture
+
+### State Management (Zustand)
+
+```javascript
+moralLevel: -3 to +3  // Current moral alignment
+traits: {
+  // Angelic
+  whiteRobe, halo, goldenGlow
+  // Demonic
+  evilGrin, horns, redGlow
+}
+environment: {
+  backgroundColor, lightColor, ambientIntensity, fogDensity
+}
+```
 
 ### Animation System (GSAP)
-- Wing growth with elastic easing
-- Background color transitions (2.5s duration)
-- Light intensity and color morphing
-- Hover effects on interactive elements
-- Particle drift and swirl motions
 
-### React Three Fiber Components
-- `@react-three/fiber` - React renderer for Three.js
-- `@react-three/drei` - Helper components (OrbitControls, Environment, ContactShadows)
-- `@react-three/postprocessing` - Visual effects (Bloom, Vignette)
+- **Trait Appearance**: Elastic ease-out with scale + fade
+- **Trait Disappearance**: Back ease-in with dissolve
+- **Camera Reactions**: Subtle dolly and tilt per choice
+- **Environment**: Color interpolation over 1.5s
+- **Icons**: Hover scaling + glow pulse + orbital float
 
-### Performance Optimizations
-- Efficient particle systems with Float32Arrays
-- Instanced geometries where possible
-- Optimized shadow maps
-- Proper cleanup and memoization
+### 3D Scene Setup
 
-## 🎯 Design Philosophy
+**Lighting**:
+- Ambient light (intensity based on moral level)
+- Directional light (color shifts: gold → white → red)
+- Point light (bottom fill for dramatic effect)
+- Rim light (back silhouette)
 
-This project demonstrates **visual narrative design** principles:
+**Post-Processing**:
+- **Bloom**: Enhanced for angelic states (scales with +level)
+- **Vignette**: Enhanced for demonic states (scales with -level)
+- **Fog**: Dynamic color matching background
 
-1. **Show, Don't Tell**: Every element communicates through form and motion
-2. **Symbolic Language**: Colors, shapes, and movements convey meaning
-3. **Interactive Storytelling**: User choices directly impact the visual experience
-4. **Cinematic Polish**: Smooth transitions and atmospheric effects enhance immersion
+**Particles**:
+- Golden dust (floats upward on good choices)
+- Red embers (flicker and rise on evil choices)
 
-## 🛠️ Technologies Used
+---
 
-- **React 18** - UI framework
-- **Three.js** - 3D graphics library
-- **React Three Fiber** - React renderer for Three.js
-- **GSAP** - Animation library
-- **Vite** - Build tool and dev server
-- **React Three Drei** - Three.js helpers
-- **React Three Postprocessing** - Visual effects
+## 🎭 Visual Design Philosophy
 
-## 📝 Customization Guide
+### Symbolic Representation
 
-### Changing Colors
+Every trait is **symbolic, not literal**:
 
-Edit color values in component files:
-- **Angel theme**: `Scene.jsx:44` (background), `Character.jsx:133` (wings)
-- **Devil theme**: `Scene.jsx:49` (background), `Character.jsx:189` (wings)
+- **White Robe** → Glowing cylinder overlay (not detailed fabric)
+- **Halo** → Transparent torus ring (simple geometric form)
+- **Horns** → Black cone meshes (menacing silhouette)
+- **Evil Grin** → Red emissive sphere on face (abstract malice)
 
-### Adjusting Animations
+### Cinematic Motion
 
-Modify GSAP parameters:
-- **Duration**: Change `duration` values in GSAP calls
-- **Easing**: Try different eases (elastic, bounce, power, etc.)
-- **Timing**: Adjust delays and stagger effects
+- **No sudden cuts** — all transitions use GSAP timelines
+- **Camera subtly reacts** to each choice (dolly + tilt)
+- **Icons gently orbit** with floating animation
+- **Character breathes** with subtle idle motion
 
-### Adding More Choices
+### Minimalist + Ethereal
 
-1. Create new icon component in `src/components/`
-2. Add case in `Scene.jsx` `handleChoice` function
-3. Design new wing geometry in `Character.jsx`
-4. Define new color scheme and effects
+- Soft fog for depth
+- Gradient backgrounds (not skyboxes)
+- Neutral human silhouette (no detailed features)
+- Focus on **light and color as narrative tools**
+
+---
+
+## 🛠️ Technologies
+
+| Technology | Purpose |
+|------------|---------|
+| **React 18** | Component architecture |
+| **Three.js** | 3D rendering engine |
+| **@react-three/fiber** | React renderer for Three.js |
+| **@react-three/drei** | Helper components (OrbitControls, ContactShadows) |
+| **@react-three/postprocessing** | Bloom, Vignette effects |
+| **GSAP** | Animation timelines |
+| **Zustand** | State management |
+| **Vite** | Build tool + dev server |
+
+---
+
+## 🧩 Customization Guide
+
+### Change Moral Level Range
+
+Edit `src/utils/useMoralState.js`:
+
+```javascript
+const newLevel = Math.min(state.moralLevel + 1, 5) // Change to +5 max
+```
+
+### Add New Traits
+
+1. Add trait to Zustand store
+2. Create mesh in `Character.jsx`
+3. Add animation triggers in `useEffect`
+4. Define GSAP timeline in `Transitions.js`
+
+### Adjust Colors
+
+**Angelic colors**: `useMoralState.js:77-80`
+**Demonic colors**: `useMoralState.js:120-123`
+**Icon materials**: `Icons.jsx` (each icon's material properties)
+
+### Modify Animations
+
+**Speed**: Change `duration` values in `Transitions.js`
+**Easing**: Try different GSAP eases (`elastic`, `back`, `bounce`, `power`)
+**Camera**: Adjust dolly amounts in `animateCameraReaction`
+
+---
 
 ## 🐛 Troubleshooting
 
-### Development server won't start
+### Scene appears black
+
+Check browser console for WebGL errors. Try:
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-### Three.js warnings in console
-- Most warnings about deprecated features can be ignored
-- Update dependencies if errors occur: `npm update`
+### Animations feel choppy
 
-### GitHub Pages shows 404
-- Ensure `base` in `vite.config.js` matches your repo name
-- Check that gh-pages branch exists
-- Verify GitHub Pages is enabled in repository settings
+- Ensure GPU acceleration is enabled in browser
+- Reduce particle counts in `Scene.jsx:247, 302`
+- Lower shadow map resolution: `shadow-mapSize-width={1024}`
 
-## 📄 License
+### Icons don't respond to clicks
 
-MIT License - Feel free to use this project for learning and creative purposes!
+- Verify OrbitControls isn't blocking pointer events
+- Check `onClick` handlers in `Icons.jsx`
+- Ensure meshes have proper geometry bounds
 
-## 🤝 Contributing
+### GitHub Pages deployment fails
 
-Contributions welcome! Feel free to:
-- Add new moral choice options
-- Enhance visual effects
-- Optimize performance
-- Improve animations
-
-## 🌟 Acknowledgments
-
-Built with passion for interactive storytelling and creative coding. Inspired by the power of visual narrative in games and interactive media.
+- Verify `base: '/StoryInteract1/'` in `vite.config.js` matches repo name
+- Check that gh-pages branch exists: `git branch -a`
+- Ensure GitHub Pages is enabled in repo settings
 
 ---
 
-**Enjoy exploring the moral dimensions of your digital character!** 🎭✨
+## 🎯 Design Goals Achieved
+
+✅ **No text or dialogue** — Pure visual storytelling
+✅ **Symbolic representation** — Traits convey meaning without realism
+✅ **Progressive transformation** — Gradual moral shifts feel earned
+✅ **Cinematic polish** — Smooth GSAP transitions + camera reactions
+✅ **Emotional lighting** — Color and intensity drive mood
+✅ **Interactive narrative** — User agency shapes the story
+
+---
+
+## 📖 Learning Resources
+
+**Three.js**: [threejs.org/docs](https://threejs.org/docs)
+**React Three Fiber**: [docs.pmnd.rs/react-three-fiber](https://docs.pmnd.rs/react-three-fiber)
+**GSAP**: [greensock.com/docs](https://greensock.com/docs/)
+**Zustand**: [github.com/pmndrs/zustand](https://github.com/pmndrs/zustand)
+
+---
+
+## 📄 License
+
+MIT License — Use freely for learning, creative projects, and portfolio work.
+
+---
+
+## 🌟 Credits
+
+Built with passion for **interactive storytelling** and **creative coding**.
+A tribute to the power of **visual narrative** in digital experiences.
+
+---
+
+**Experience the story. Make your choices. Watch the transformation.** 🎭✨

@@ -1,22 +1,29 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Canvas } from '@react-three/fiber'
 import Scene from './components/Scene'
 
 /**
  * Main App Component
- * Sets up the Three.js canvas and manages the global state for moral choices
+ *
+ * Sets up the Three.js canvas for the 3D moral choice narrative
+ * The entire story is told visually through color, motion, and light
  */
 function App() {
-  const [choice, setChoice] = useState(null) // null, 'angel', 'devil', or 'neutral'
-
   return (
     <div style={{ width: '100vw', height: '100vh', background: '#000' }}>
       <Canvas
         shadows
-        camera={{ position: [0, 2, 8], fov: 50 }}
-        gl={{ antialias: true, alpha: false }}
+        camera={{
+          position: [0, 2, 8],
+          fov: 50,
+        }}
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference: 'high-performance',
+        }}
       >
-        <Scene choice={choice} setChoice={setChoice} />
+        <Scene />
       </Canvas>
     </div>
   )
