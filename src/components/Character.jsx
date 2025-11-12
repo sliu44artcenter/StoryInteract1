@@ -265,9 +265,9 @@ function Character({ choice }) {
       </mesh>
 
       {/* Angel Wings - Smooth and Feathered */}
-      <group ref={angelWingsRef} position={[0, 0.8, -0.35]} scale={0}>
+      <group ref={angelWingsRef} position={[0, 0.8, -0.3]} scale={0}>
         {/* Left Wing - Multiple feather layers for depth */}
-        <group position={[-0.3, 0, -0.1]} rotation={[-0.2, 0.8, 0.4]}>
+        <group position={[-0.4, 0, 0]} rotation={[0, Math.PI / 2 + 0.3, 0]}>
           <mesh geometry={angelWingGeometry}>
             <meshStandardMaterial
               color="#ffffff"
@@ -278,7 +278,7 @@ function Character({ choice }) {
               side={THREE.DoubleSide}
             />
           </mesh>
-          <mesh position={[0.1, -0.2, -0.05]} rotation={[0, 0, -0.2]} geometry={angelWingGeometry} scale={0.8}>
+          <mesh position={[-0.1, -0.2, 0]} rotation={[0, 0, -0.2]} geometry={angelWingGeometry} scale={0.8}>
             <meshStandardMaterial
               color="#ffed4e"
               emissive="#ffd700"
@@ -288,7 +288,7 @@ function Character({ choice }) {
               side={THREE.DoubleSide}
             />
           </mesh>
-          <mesh position={[0.15, -0.4, -0.08]} rotation={[0, 0, -0.3]} geometry={angelWingGeometry} scale={0.65}>
+          <mesh position={[-0.15, -0.4, 0]} rotation={[0, 0, -0.3]} geometry={angelWingGeometry} scale={0.65}>
             <meshStandardMaterial
               color="#ffd700"
               emissive="#ffd700"
@@ -301,8 +301,8 @@ function Character({ choice }) {
         </group>
 
         {/* Right Wing - Mirror of left */}
-        <group position={[0.3, 0, -0.1]} rotation={[-0.2, -0.8, -0.4]}>
-          <mesh geometry={angelWingGeometry} scale={[-1, 1, 1]}>
+        <group position={[0.4, 0, 0]} rotation={[0, -Math.PI / 2 - 0.3, 0]}>
+          <mesh geometry={angelWingGeometry}>
             <meshStandardMaterial
               color="#ffffff"
               emissive="#ffd700"
@@ -312,7 +312,7 @@ function Character({ choice }) {
               side={THREE.DoubleSide}
             />
           </mesh>
-          <mesh position={[-0.1, -0.2, -0.05]} rotation={[0, 0, 0.2]} geometry={angelWingGeometry} scale={[-0.8, 0.8, 0.8]}>
+          <mesh position={[0.1, -0.2, 0]} rotation={[0, 0, 0.2]} geometry={angelWingGeometry} scale={0.8}>
             <meshStandardMaterial
               color="#ffed4e"
               emissive="#ffd700"
@@ -322,7 +322,7 @@ function Character({ choice }) {
               side={THREE.DoubleSide}
             />
           </mesh>
-          <mesh position={[-0.15, -0.4, -0.08]} rotation={[0, 0, 0.3]} geometry={angelWingGeometry} scale={[-0.65, 0.65, 0.65]}>
+          <mesh position={[0.15, -0.4, 0]} rotation={[0, 0, 0.3]} geometry={angelWingGeometry} scale={0.65}>
             <meshStandardMaterial
               color="#ffd700"
               emissive="#ffd700"
@@ -336,9 +336,9 @@ function Character({ choice }) {
       </group>
 
       {/* Devil Wings - Smooth Bat Wings */}
-      <group ref={devilWingsRef} position={[0, 0.8, -0.35]} scale={0}>
+      <group ref={devilWingsRef} position={[0, 0.8, -0.3]} scale={0}>
         {/* Left Wing */}
-        <group position={[-0.2, 0, -0.1]} rotation={[-0.1, 0.6, 0.3]}>
+        <group position={[-0.35, 0, 0]} rotation={[0.2, Math.PI / 2 + 0.4, 0.2]}>
           <mesh geometry={devilWingGeometry}>
             <meshStandardMaterial
               color="#4a0000"
@@ -349,7 +349,7 @@ function Character({ choice }) {
             />
           </mesh>
           {/* Wing membrane with darker color */}
-          <mesh position={[0.3, 0.3, 0.01]} geometry={devilWingGeometry} scale={0.7}>
+          <mesh position={[-0.2, 0.3, 0]} geometry={devilWingGeometry} scale={0.7}>
             <meshStandardMaterial
               color="#8b0000"
               emissive="#cc0000"
@@ -361,15 +361,15 @@ function Character({ choice }) {
             />
           </mesh>
           {/* Wing bones/spikes */}
-          <mesh position={[0.6, 0.5, 0]} rotation={[0, 0, 0.5]}>
+          <mesh position={[-0.5, 0.5, 0]} rotation={[0, 0, 0.5]}>
             <coneGeometry args={[0.08, 0.3, 8]} />
             <meshStandardMaterial color="#2d0000" roughness={0.3} metalness={0.5} />
           </mesh>
         </group>
 
         {/* Right Wing - Mirror */}
-        <group position={[0.2, 0, -0.1]} rotation={[-0.1, -0.6, -0.3]}>
-          <mesh geometry={devilWingGeometry} scale={[-1, 1, 1]}>
+        <group position={[0.35, 0, 0]} rotation={[0.2, -Math.PI / 2 - 0.4, -0.2]}>
+          <mesh geometry={devilWingGeometry}>
             <meshStandardMaterial
               color="#4a0000"
               emissive="#ff0000"
@@ -379,7 +379,7 @@ function Character({ choice }) {
             />
           </mesh>
           {/* Wing membrane */}
-          <mesh position={[-0.3, 0.3, 0.01]} geometry={devilWingGeometry} scale={[-0.7, 0.7, 0.7]}>
+          <mesh position={[0.2, 0.3, 0]} geometry={devilWingGeometry} scale={0.7}>
             <meshStandardMaterial
               color="#8b0000"
               emissive="#cc0000"
@@ -391,7 +391,7 @@ function Character({ choice }) {
             />
           </mesh>
           {/* Wing bones/spikes */}
-          <mesh position={[-0.6, 0.5, 0]} rotation={[0, 0, -0.5]}>
+          <mesh position={[0.5, 0.5, 0]} rotation={[0, 0, -0.5]}>
             <coneGeometry args={[0.08, 0.3, 8]} />
             <meshStandardMaterial color="#2d0000" roughness={0.3} metalness={0.5} />
           </mesh>
