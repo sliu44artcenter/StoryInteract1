@@ -267,7 +267,7 @@ function Character({ choice }) {
       {/* Angel Wings - Smooth and Feathered */}
       <group ref={angelWingsRef} position={[0, 0.8, -0.35]} scale={0}>
         {/* Left Wing - Multiple feather layers for depth */}
-        <group position={[-0.3, 0, -0.1]} rotation={[-0.2, -0.8, 0.4]}>
+        <group position={[-0.3, 0, -0.1]} rotation={[-0.2, 0.8, 0.4]}>
           <mesh geometry={angelWingGeometry}>
             <meshStandardMaterial
               color="#ffffff"
@@ -301,7 +301,7 @@ function Character({ choice }) {
         </group>
 
         {/* Right Wing - Mirror of left */}
-        <group position={[0.3, 0, -0.1]} rotation={[-0.2, 0.8, -0.4]}>
+        <group position={[0.3, 0, -0.1]} rotation={[-0.2, -0.8, -0.4]}>
           <mesh geometry={angelWingGeometry} scale={[-1, 1, 1]}>
             <meshStandardMaterial
               color="#ffffff"
@@ -338,7 +338,7 @@ function Character({ choice }) {
       {/* Devil Wings - Smooth Bat Wings */}
       <group ref={devilWingsRef} position={[0, 0.8, -0.35]} scale={0}>
         {/* Left Wing */}
-        <group position={[-0.2, 0, -0.1]} rotation={[-0.1, -0.6, 0.3]}>
+        <group position={[-0.2, 0, -0.1]} rotation={[-0.1, 0.6, 0.3]}>
           <mesh geometry={devilWingGeometry}>
             <meshStandardMaterial
               color="#4a0000"
@@ -368,7 +368,7 @@ function Character({ choice }) {
         </group>
 
         {/* Right Wing - Mirror */}
-        <group position={[0.2, 0, -0.1]} rotation={[-0.1, 0.6, -0.3]}>
+        <group position={[0.2, 0, -0.1]} rotation={[-0.1, -0.6, -0.3]}>
           <mesh geometry={devilWingGeometry} scale={[-1, 1, 1]}>
             <meshStandardMaterial
               color="#4a0000"
