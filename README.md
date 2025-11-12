@@ -1,31 +1,37 @@
 # 🌟 3D Narrative Scene - Interactive Moral Choices
 
-An immersive 3D narrative experience built with **Three.js**, **React**, and **GSAP** that tells a story of moral choices through visual symbolism and cinematic interactions.
+An immersive 3D narrative experience built with **Three.js**, **React**, and **GSAP** that tells a story of moral choices through **pure light, color, and atmospheric transformation** — no text, no dialogue, no physical appendages.
 
 ## ✨ Features
 
-- **Interactive 3D Character**: A humanoid figure that transforms based on moral choices
-- **Visual Storytelling**: No text or dialogue - pure symbolic narrative
+- **Interactive 3D Character**: A humanoid figure that transforms through **material properties and lighting** based on moral choices
+- **Visual Storytelling**: Purely symbolic narrative conveyed through:
+  - Dynamic lighting (rim lights, key lights, spotlights)
+  - Material color and emissive properties
+  - Atmospheric fog and particle effects
+  - Camera movements and compositions
 - **Three Moral Paths**:
-  - 🌟 **Golden Halo** - Choose the path of good deeds (angel wings & golden atmosphere)
-  - 🔥 **Dark Flame** - Choose the path of evil deeds (devil wings & red atmosphere)
-  - ⚖️ **Balance Scale** - Choose neutrality (no transformation)
+  - 🌟 **Golden Halo** - Path of virtue (golden glow, top-down rim light, warm atmosphere)
+  - 🔥 **Dark Flame** - Path of corruption (crimson emissive, bottom-up spotlight, oppressive fog)
+  - ⚖️ **Balance Scale** - Path of neutrality (natural tones, balanced lighting, calm environment)
 - **Cinematic Effects**:
-  - Dynamic lighting transitions
+  - Multi-light cinematic rig with dynamic intensities
+  - Volumetric fog with color transitions
+  - Character material transformations (skin and clothing)
+  - Camera zoom and orbit animations
   - Ambient particle systems
   - Post-processing effects (bloom, vignette)
-  - Smooth GSAP animations
-  - Interactive hover states
+  - Smooth GSAP-powered transitions
 
 ## 🎮 How to Experience
 
-1. **Open the webpage** - A 3D character stands in the center
+1. **Open the webpage** - A 3D character stands in the center with calm lighting
 2. **Observe the three floating icons** around the character
 3. **Hover over icons** - They glow and pulse with anticipation
 4. **Click an icon** to make your choice:
-   - **Halo Icon** → Angel wings grow, golden light fills the scene
-   - **Flame Icon** → Devil wings emerge, darkness and red hues envelop
-   - **Scale Icon** → Character remains unchanged, maintaining balance
+   - **Halo Icon** → Golden light bathes the character from above, skin glows warmly, heavenly fog fills the space
+   - **Flame Icon** → Red spotlight illuminates from below, clothing emits crimson light, oppressive shadows lengthen
+   - **Scale Icon** → Lighting returns to neutral balance, natural colors restore, fog dissipates
 
 ## 🚀 Quick Start
 
@@ -92,11 +98,11 @@ gh-pages -d dist
 3d-narrative-scene/
 ├── src/
 │   ├── components/
-│   │   ├── Scene.jsx          # Main 3D scene orchestration
-│   │   ├── Character.jsx      # Humanoid character with wings
-│   │   ├── HaloIcon.jsx       # Golden halo icon (good)
-│   │   ├── FlameIcon.jsx      # Dark flame icon (evil)
-│   │   ├── ScaleIcon.jsx      # Balance scale icon (neutral)
+│   │   ├── Scene.jsx          # Main 3D scene orchestration with lighting rig
+│   │   ├── Character.jsx      # Humanoid character with material transformations
+│   │   ├── HaloIcon.jsx       # Golden halo icon (virtue)
+│   │   ├── FlameIcon.jsx      # Dark flame icon (corruption)
+│   │   ├── ScaleIcon.jsx      # Balance scale icon (neutrality)
 │   │   └── Particles.jsx      # Ambient particle effects
 │   ├── App.jsx                # Root component
 │   └── main.jsx               # Application entry point
@@ -108,17 +114,24 @@ gh-pages -d dist
 ## 🎨 Technical Highlights
 
 ### Three.js Scene Setup
-- **Camera**: Positioned at [0, 2, 8] with 50° FOV
-- **Lighting**: Ambient + directional + point lights with dynamic color transitions
+- **Camera**: Positioned at [0, 2, 8] with 50° FOV, dynamic zoom animations
+- **Cinematic Lighting Rig**:
+  - Main key light (directional) with color/intensity transitions
+  - Top-down rim light for angelic silhouette
+  - Bottom-up spotlight for demonic effect
+  - Ambient light with dynamic intensity
+  - Fill light for atmospheric depth
+- **Volumetric Fog**: FogExp2 with color and density animations
 - **Shadows**: High-quality contact shadows and shadow mapping
-- **Environment**: Sunset preset with dynamic fog
+- **Environment**: Sunset preset with background texture transitions
 
 ### Animation System (GSAP)
-- Wing growth with elastic easing
-- Background color transitions (2.5s duration)
-- Light intensity and color morphing
-- Hover effects on interactive elements
-- Particle drift and swirl motions
+- **Material Transformations**: Character skin and clothing color/emissive properties
+- **Dynamic Lighting**: Smooth intensity and color transitions across multiple lights
+- **Camera Movements**: Zoom-in on choice selection, gentle return orbit
+- **Fog Animation**: Density and color morphing for atmospheric storytelling
+- **Particle Systems**: Drift, swirl, and fade effects
+- **Icon Interactions**: Hover scaling and glow effects with elastic easing
 
 ### React Three Fiber Components
 - `@react-three/fiber` - React renderer for Three.js
@@ -133,12 +146,19 @@ gh-pages -d dist
 
 ## 🎯 Design Philosophy
 
-This project demonstrates **visual narrative design** principles:
+This project demonstrates **pure visual storytelling** principles:
 
-1. **Show, Don't Tell**: Every element communicates through form and motion
-2. **Symbolic Language**: Colors, shapes, and movements convey meaning
-3. **Interactive Storytelling**: User choices directly impact the visual experience
-4. **Cinematic Polish**: Smooth transitions and atmospheric effects enhance immersion
+1. **Light as Language**: Moral transformation conveyed entirely through lighting, color, and atmosphere
+2. **No Physical Metaphors**: Instead of literal wings or horns, the character transforms through:
+   - Material emissive properties (inner glow)
+   - Dynamic multi-light compositions (rim lights, spotlights)
+   - Atmospheric fog and environmental color
+3. **Cinematic Composition**: Every choice triggers a carefully choreographed lighting and camera sequence
+4. **Symbolic Subtlety**: Viewers interpret meaning through visual cues:
+   - **Golden top-light** = enlightenment, divinity, ascension
+   - **Red bottom-light** = corruption, shadow, descent
+   - **Balanced white light** = equilibrium, humanity, choice
+5. **Interactive Storytelling**: User choices directly impact visual experience without explicit instruction
 
 ## 🛠️ Technologies Used
 
@@ -154,23 +174,35 @@ This project demonstrates **visual narrative design** principles:
 
 ### Changing Colors
 
-Edit color values in component files:
-- **Angel theme**: `Scene.jsx:44` (background), `Character.jsx:133` (wings)
-- **Devil theme**: `Scene.jsx:49` (background), `Character.jsx:189` (wings)
+Edit lighting and material colors:
+- **Angel theme**: Modify `Scene.jsx:84-91` (lighting colors, fog) and `Character.jsx:54-62` (material properties)
+- **Devil theme**: Modify `Scene.jsx:93-102` (lighting colors, fog) and `Character.jsx:64-72` (material properties)
+- **Neutral theme**: Modify `Scene.jsx:103-113` and `Character.jsx:74-82`
 
-### Adjusting Animations
+### Adjusting Lighting
 
-Modify GSAP parameters:
-- **Duration**: Change `duration` values in GSAP calls
-- **Easing**: Try different eases (elastic, bounce, power, etc.)
-- **Timing**: Adjust delays and stagger effects
+Fine-tune the cinematic rig in `Scene.jsx`:
+- **Rim light position**: `Scene.jsx:262` - Change Y-axis for different top-light angles
+- **Spotlight angle**: `Scene.jsx:274` - Adjust cone angle for devil light
+- **Light intensities**: Modify intensity values in `handleChoice` function
+
+### Modifying Animations
+
+Adjust GSAP parameters:
+- **Material transitions**: `Character.jsx:89-136` - Change duration and easing
+- **Camera movements**: `Scene.jsx:191-206` - Modify zoom distance and timing
+- **Fog animations**: `Scene.jsx:174-188` - Adjust density and color transition speed
+- **Light transitions**: `Scene.jsx:122-162` - Change light fade durations
 
 ### Adding More Choices
 
 1. Create new icon component in `src/components/`
-2. Add case in `Scene.jsx` `handleChoice` function
-3. Design new wing geometry in `Character.jsx`
-4. Define new color scheme and effects
+2. Add new case in `Scene.jsx` `handleChoice` function with:
+   - Light colors and intensities
+   - Fog color and density
+   - Camera animation parameters
+3. Add corresponding material transformation in `Character.jsx` effect hook
+4. Define new symbolic aura color if needed
 
 ## 🐛 Troubleshooting
 
